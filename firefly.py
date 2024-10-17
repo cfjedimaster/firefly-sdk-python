@@ -16,6 +16,35 @@ class FireflyServices:
 		self.accessToken = response.json()['access_token']
 		return self.accessToken
 
+	def generateSimilar(self, uploadId="", url="", **kwargs):
+		
+		if uploadId == "" and url == "":
+			raise Exception("You must pass either uploadId or url to generateSimilar")
+
+		token = self.__getAccessToken()
+
+		data = {
+			"image": {
+				"source": {}	
+			}
+		}
+
+		if uploadId != "":
+			data["image"]["source"]["uploadId"] = uploadId
+
+		if url != "":
+			data["image"]["source"]["url"] = url
+
+		data.update(kwargs)
+
+		response = requests.post("https://firefly-api.adobe.io/v3/images/generate-similar", json=data, headers = {
+			"X-API-Key":self.clientId, 
+			"Authorization":f"Bearer {token}",
+			"Content-Type":"application/json"
+		}) 
+
+		return response.json()
+
 	def textToImage(self, prompt, **kwargs):
 		token = self.__getAccessToken()
 
@@ -24,7 +53,6 @@ class FireflyServices:
 		}
 
 		data.update(kwargs)
-		#print(data)
 		
 		response = requests.post("https://firefly-api.adobe.io/v3/images/generate", json=data, headers = {
 			"X-API-Key":self.clientId, 
@@ -38,3 +66,18 @@ class FireflyServices:
 		with open(path,'wb') as output:
 			bits = requests.get(url, stream=True).content
 			output.write(bits)
+
+	def upload(self, path):
+		token = self.__getAccessToken()
+
+		with open(path,'rb') as file:
+
+			response = requests.post("https://firefly-api.adobe.io/v2/storage/image", data=file, headers = {
+				"X-API-Key":self.clientId, 
+				"Authorization":f"Bearer {token}",
+				"Content-Type": "image/jpeg"
+			}) 
+
+			# Simplify the return a bit... 
+			return response.json()["images"][0]["id"]
+		

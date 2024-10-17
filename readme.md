@@ -15,7 +15,11 @@ ff_client_secret = os.environ.get('CLIENT_SECRET')
 ff = FireflyServices(ff_client_id, ff_client_secret)
 ```
 
-You can then call methods. Currently, only [Text to Image](https://developer.adobe.com/firefly-services/docs/firefly-api/guides/api/image_generation/V3/) is supported.
+You can then call methods defined below.
+
+### Text To Image:
+
+To use [Text to Image](https://developer.adobe.com/firefly-services/docs/firefly-api/guides/api/image_generation/V3/), pass a prompt and any optionally supported arguments.
 
 ```
 res = ff.textToImage("cat under sunset", numVariations=2)
@@ -28,6 +32,20 @@ for output in res["outputs"]:
 	filename = f"output/{output['seed']}.jpg"
 	ff.download(output["image"]["url"], filename)
 	print(f"Saved {filename}")
+```
+
+## Generate Similar
+
+To use [Generate Similar]([https://develo](https://developer.adobe.com/firefly-services/docs/firefly-api/guides/api/generate-similar/)), pass a image source and any optional arguments. The SDK supports an upload method:
+
+```
+img = ff.upload("./source_cat.jpg")
+```
+
+Which can then be passed to the method:
+
+```
+res = ff.generateSimilar(uploadId=img, numVariations=2)
 ```
 
 ## To Do
