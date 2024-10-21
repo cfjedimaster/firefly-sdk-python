@@ -72,6 +72,17 @@ placement = {
 res = ff.generateObjectComposite("a green grassy field on a sunny day", uploadId=img, numVariations=2, placement=placement)
 ```
 
+## Fill Image
+
+The [Fill Image](https://developer.adobe.com/firefly-services/docs/firefly-api/guides/api/generative_fill/V3/) API requires an image and a mask. Here's an example:
+
+```
+img = ff.upload("./source_dog_original.png")
+mask = ff.upload("./source_dog_mask.png")
+
+res = ff.fillImage(img, mask)
+```
+
 ## To Do
 
 Currently, the internal call to get an access token will cache the result, but not check the expiration. I need to add that.

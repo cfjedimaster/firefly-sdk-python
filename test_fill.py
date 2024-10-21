@@ -15,12 +15,7 @@ mask = ff.upload("./source_dog_mask.png")
 print("Mask uploaded")
 
 print("Generating filled image")
-placement = {
-	"alignment": {
-		"vertical": "center",
-		"horizontal": "center"
-	}	
-}
+
 res = ff.fillImage(img, mask)
 
 for output in res["outputs"]:
