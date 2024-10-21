@@ -15,7 +15,15 @@ ff_client_secret = os.environ.get('CLIENT_SECRET')
 ff = FireflyServices(ff_client_id, ff_client_secret)
 ```
 
-You can then call methods defined below.
+You can then call the methods defined below.
+
+## A Note on Source Images
+
+In order to make things simpler, you can pass the ID returned from the `upload` method (which is automatic) or a URL from supported
+cloud storage providers as your input. The SDK will determine what's what and use the appropriate parameters. However, this only
+applies in cases where the image is the main argument to the method, like `Generate Similar` and `Expand`. If you want to use an image as a style reference in `Text to Image`, you need to pass it "complete" per the spec, `style.imageReference.source.*`.
+
+Depending on how well this works for real folks in the wild (let me know!), I may adjust accordingly.
 
 ### Text To Image:
 
@@ -45,7 +53,23 @@ img = ff.upload("./source_cat.jpg")
 Which can then be passed to the method:
 
 ```
-res = ff.generateSimilar(uploadId=img, numVariations=2)
+res = ff.generateSimilar(img, numVariations=2)
+```
+
+## Generate Object Composite
+
+The [Generate Object Composite](https://developer.adobe.com/firefly-services/docs/firefly-api/guides/api/generate-object-composite/) API requires either an image and a mask, or an image with a transparent background. Here's an example:
+
+```
+img = ff.upload("./source_sports_bottle_nobg.png")
+
+placement = {
+	"alignment": {
+		"vertical": "center",
+		"horizontal": "center"
+	}	
+}
+res = ff.generateObjectComposite("a green grassy field on a sunny day", uploadId=img, numVariations=2, placement=placement)
 ```
 
 ## To Do
@@ -54,4 +78,5 @@ Currently, the internal call to get an access token will cache the result, but n
 
 ## Changelog
 
+10/21/2024: Added Generate Object Composite, Expand image, Fill, and reworked source images.
 10/17/2024: Initial release. 
