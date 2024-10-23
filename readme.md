@@ -83,11 +83,32 @@ mask = ff.upload("./source_dog_mask.png")
 res = ff.fillImage(img, mask)
 ```
 
+## Remove Background
+
+The [Remove Background](https://developer.adobe.com/firefly-services/docs/photoshop/api/photoshop_removeBackground/) API requires
+you to use external storage. In it's simplest form, given imageInput and imageOutput are S3 URLs, you can do this:
+
+```
+result = ff.removeBackground(imageInput, imageOutput)
+```
+
+The SDK, internally, polls the job result every two seconds and returns the final result. Note that for Azure and Dropbox, you
+must pass the first two arguments as dictionary and set `storage` to the right value, for example:
+
+```
+imageInput = {
+	"href":"the signed url", 
+	"storage":"azure"
+}
+```
+
+
 ## To Do
 
 Currently, the internal call to get an access token will cache the result, but not check the expiration. I need to add that.
 
 ## Changelog
 
+10/23/2024: Added Remove Background
 10/21/2024: Added Generate Object Composite, Expand image, Fill, and reworked source images.
 10/17/2024: Initial release. 
