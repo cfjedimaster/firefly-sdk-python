@@ -109,6 +109,6 @@ Currently, the internal call to get an access token will cache the result, but n
 
 ## Changelog
 
-10/23/2024: Added Remove Background
-10/21/2024: Added Generate Object Composite, Expand image, Fill, and reworked source images.
-10/17/2024: Initial release. 
+* 10/23/2024: Added Remove Background
+* 10/21/2024: Added Generate Object Composite, Expand image, Fill, and reworked source images.
+* 10/17/2024: Initial release. 
